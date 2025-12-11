@@ -3,6 +3,7 @@ const dotenv = require ("dotenv")
 const connectDb = require('./config/db')
 const userRoute = require('./Routes/userRoute.js')
 const eventRoute = require('./Routes/eventRoute.js')
+const { notFound, errorHandler} = require("./MIddlewares/error.js")
 
 
 
@@ -17,7 +18,12 @@ app.use(express.json())
 
 // connect route
 app.use('/auth', userRoute)
-app.use('/event' , eventRoute)
+app.use('/event', eventRoute)
+
+//error handlers
+
+app.use(notFound)
+app.use(errorHandler)
 
 
 const PORT = 7000
