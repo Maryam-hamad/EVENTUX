@@ -10,23 +10,24 @@ const dotenv = require ('dotenv')
 //REGISTER USER 
 
 const registerUser = async (req , res ) => {
-  const { name , email , password} = req.body
+  const { name , email , password , role} = req.body
 
   const userExist = await User.findOne({email})
    
   if(userExist) return res.status(200).json({message:"User already exist"})
 
-       //HASHING THE PASSWORD
+  //HASHING THE PASSWORD
 
-    const hashedPassword = await hashPassword(password);
+  const hashedPassword = await hashPassword(password);
 
-    const user = await  User.create({ name ,email , password: hashedPassword})
-     res.status(200).json({
+  const user = await  User.create({ name ,email , password: hashedPassword, role})
+
+  res.status(200).json({
       _id : user._id,
-      email: user.email,
-      token : createToken(user._id , user.role), 
-      role: user.role,
- 
+      mail: user.email,
+      token : createToken(user._id , user.role),
+      role:user.role 
+  
     })
   }
 
@@ -43,7 +44,7 @@ const registerUser = async (req , res ) => {
      const hashedPassword = user.password;
      await bcrypt.compare(password ,hashedPassword)
 
-     if (user && (user.password ==hashedPassword)){
+     if (user && (user.password == hashedPassword)){
 
       res.status(200).json({
         name:user.name,
@@ -55,6 +56,16 @@ const registerUser = async (req , res ) => {
    }
 
   }
+
+
+  //REGISTER WITH GOOGLE
+
+  
+
+
+
+
+
 
     //GET PROFILE
    const getProfile = async (req , res)=>{

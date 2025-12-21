@@ -4,13 +4,17 @@ const  dotenv = require('dotenv')
 
 const protect = (req, res , next ) =>{
 try{
+
   let token;
 
   if (req.headers.authorization){
-    token =req.headers.authorization
+
+    token = req.headers.authorization
+
+  }
 
     if (!token){
-      return res.status(403).json({meessage:"Access Denied"})
+        return res.status(403).json({meessage:"Access Denied"})
     }
 
     //VERIFY TOKEN
@@ -18,11 +22,9 @@ try{
 
     // VERIFY USER 
 
-    const user = decoded
+    req.user = decoded
 
     next()
-
-  }
 
 
 }

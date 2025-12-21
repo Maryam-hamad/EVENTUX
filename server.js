@@ -4,7 +4,7 @@ const connectDb = require('./config/db')
 const userRoute = require('./Routes/userRoute.js')
 const eventRoute = require('./Routes/eventRoute.js')
 const { notFound, errorHandler} = require("./MIddlewares/error.js")
-
+const bookingRoute = require ('./Routes/bookingRoute.js')
 
 
 
@@ -19,6 +19,9 @@ app.use(express.json())
 // connect route
 app.use('/auth', userRoute)
 app.use('/event', eventRoute)
+app.use('/ticket', bookingRoute)
+
+
 
 //error handlers
 

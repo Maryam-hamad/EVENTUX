@@ -7,11 +7,13 @@ const dotenv = require('dotenv')
 // CREATE AN EVENT
 
 const createEvent = async (req, res) =>{
-  const event = new Event(req.body)
-  const eventDb = event.save()
-  res.status(201).json(eventDb)
+
+      const event = new Event(req.body)
+      const eventDb =await  event.save()
+      res.status(201).json(eventDb)
 
 }
+  
 
 
 
@@ -38,7 +40,7 @@ const getAllEvents = async (req , res) => {
   //GET CREATED EVENTS BY ADMIN
 
   const getMyEvents = async (req , res ) => {
-    const myEvents = await Event.find()
+    const myEvents = await Event.find({user:req.user.id})
     res.status(200).json(myEvents)
     }
 
@@ -56,10 +58,21 @@ const getAllEvents = async (req , res) => {
     res.status(201).json(updatedEvent)
    
   }
+ // DELETE EVENT
+ 
+  const deleteEvent = async (req , res ) => {
+    const event = await Event.findById( req.params.id)
+
+    if (!event) return res.status(403).json({message:"Event is not Avilable"})
+
+    await event.deleteOne();
+    res.status(200).json({message:"Event deleted Successfully"})
+
+
+  }
 
 
 
 
-
-  module.exports = { createEvent, getAllEvents , getEventById ,getMyEvents , updateEvent}
+  module.exports = { createEvent, getAllEvents , getEventById ,getMyEvents , updateEvent , deleteEvent} 
 
