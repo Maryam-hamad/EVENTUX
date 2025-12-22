@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const ticketSchema = new mongoose.Schema({
   eventId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -17,12 +16,11 @@ const ticketSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    
   },
+
   email: {
     type: String,
     required: true,
-    unique:true
   },
 
   numberOfTickets:{
@@ -39,11 +37,10 @@ const ticketSchema = new mongoose.Schema({
   ticketPrice: {
     type: Number,
     required: true,
-
   }
 }, {timestamps: true});
 
-
+// Using Compound index to prevent duplicate email per event
+ticketSchema.index({ email: 1, eventId: 1 }, { unique: true })
 
 module.exports = mongoose.model('Ticket', ticketSchema)
-
