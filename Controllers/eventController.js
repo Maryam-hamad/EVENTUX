@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Event = require ('../Models/eventsModel')
 const jwt = require ('jsonwebtoken')
 const dotenv = require('dotenv')
+const generateCode = require('random-code-generate')
 
 
 // CREATE AN EVENT
@@ -72,7 +73,46 @@ const getAllEvents = async (req , res) => {
   }
 
 
+  //post req for  event sharing api
+
+  const shareEvent = async ( req,res) => {
+    const eventId = (req.body)
+    if(!eventId) return res.status(404).json({message:"Event not found"})
+
+    const Url = `http://localhost:7000/event/share/${eventId}`
+    return res.status(201).json(Url)
+
+  } 
 
 
-  module.exports = { createEvent, getAllEvents , getEventById ,getMyEvents , updateEvent , deleteEvent} 
+
+ //post req to. join event with code 
+
+ const eventCode = async (req,res) => {
+  const eventId = (req.body)
+  if(!eventId) return res.status(404).json({message:"Event not found"})
+
+ let OTP = generateCode.generateOtp() 
+  return res.status(201).json(OTP)
+  
+ }
+
+//EVENT FILTERING API
+
+ const filterEvent = async (req , res) => {
+  const event = await Event.find(req.body.title,
+    req.body.eventType,
+    req.body.category,
+    req.body.price,
+    req.body.DateRange
+  )
+
+  if(!event) return res.status(404).json({message:"Event not found"})
+
+  return res.status(200).json(event)
+
+ }
+
+
+  module.exports = { createEvent, getAllEvents , getEventById ,getMyEvents , updateEvent , deleteEvent ,shareEvent , eventCode, filterEvent} 
 
