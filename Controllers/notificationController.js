@@ -1,27 +1,49 @@
-const mongoose = require("mongoose")
-const Notification = require('../Models/notificationModel')
+const Mail = require("../Models/mailModel")
+const transporter = require("../Utils/transporter")
 const dotenv = require('dotenv')
-const { MailerSend, EmailParams, Sender, Recipient } = require ("mailersend");
+const Notification = require("../Models/notificationModel")
+
+const createMail = async (req ,res) => {
+    const {to ,subject ,text , html} = req.body
+    await transporter.sendMail(Mail)
+
+   return res.status(201).json({
+        from: `"Eventux" <${process.env.USER_MAIL}>`,
+        to,
+        subject,
+        text,
+        html,
+   })
+
+}
 
 
 
- 
-const mailerSend = new MailerSend({
-    apiKey: process.env.API_KEY,
-});
 
-const sentFrom = new Sender("maryamhskit@gmail.com", "Maryam Hamad");
+// Create a notification
+const createNotification = async ({ userId, type, title, message, link }) => {
+  const notification = await Notification.create({
+    userId,
+    type,
+    title,
+    message,
+    link,
+  });
 
-const recipients = [
-    new Recipient("recipient@email.com", "Your Client")
-];
+  return  res.status(201).json({
+    title:notification.title,
+    message:notification.message,
+    link:notification.link,
+  })
+};
 
-const emailParams = new EmailParams()
-    .setFrom(sentFrom)
-    .setTo(recipients)
-    .setReplyTo(sentFrom)
-    .setSubject("This is a Subject")
-    .setHtml("Greetings from the team, you got this message through MailerSend.")
-    .setText("Greetings from the team, you got this message through MailerSend.");
+//GET request <--user display all notification -->
 
-await mailerSend.email.send(emailParams);
+const getNotifications = async (req,res) => {
+    const user = req.user.id
+    const notifications = await Notification.find(user)
+   return res.status(200).json(notifications)
+}
+
+module.exports ={ createMail , createNotification , getNotifications}
+

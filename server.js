@@ -5,6 +5,8 @@ const userRoute = require('./Routes/userRoute.js')
 const eventRoute = require('./Routes/eventRoute.js')
 const { notFound, errorHandler} = require("./MIddlewares/error.js")
 const bookingRoute = require ('./Routes/bookingRoute.js')
+const notificationRoute = require('./Routes/notificationRoute.js')
+const passport = require("./config/passport.js")
 
 
 
@@ -20,6 +22,8 @@ app.use(express.json())
 app.use('/auth', userRoute)
 app.use('/event', eventRoute)
 app.use('/ticket', bookingRoute)
+app.use('/notification' , notificationRoute)
+
 
 
 
