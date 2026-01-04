@@ -6,8 +6,7 @@ const eventRoute = require('./Routes/eventRoute.js')
 const { notFound, errorHandler} = require("./MIddlewares/error.js")
 const bookingRoute = require ('./Routes/bookingRoute.js')
 const notificationRoute = require('./Routes/notificationRoute.js')
-const passport = require("./config/passport.js")
-
+const cors = require('cors')
 
 
 //connect data-base
@@ -15,8 +14,10 @@ dotenv.config()
 connectDb()
 
 //prepare app
+
 const app = express()
 app.use(express.json()) 
+app.use(cors())
 
 // connect route
 app.use('/auth', userRoute)

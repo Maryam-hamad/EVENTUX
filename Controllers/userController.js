@@ -58,24 +58,6 @@ const registerUser = async (req , res ) => {
   }
 
 
-  
-  // GOOGLE SIGNUP
-    const googleCallbackController = async (req, res) => {
-      const user = await googleSignUp(req.user);
-
-      res.status(200).json({
-        message: "Google signup successful",
-        token: createToken(user._id, user.role), 
-        user,
-      });
-    };
-
-
-
-
-  
-
-
     //GET PROFILE
    const getProfile = async (req , res)=>{
      try{
@@ -103,4 +85,4 @@ const registerUser = async (req , res ) => {
     }
 
 
-  module.exports = {registerUser , loginUser , getProfile, googleCallbackController}
+  module.exports = {registerUser , loginUser , getProfile} 
