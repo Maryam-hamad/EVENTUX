@@ -40,8 +40,7 @@ const createNotification = async ({ userId, type, title, message, link }) => {
 //GET request <--user display all notification -->
 
 const getNotifications = async (req,res) => {
-    const user = req.user.id
-    const notifications = await Notification.find(user)
+    const notifications = await Notification.find({user:req.user.id})
    return res.status(200).json(notifications)
 }
 

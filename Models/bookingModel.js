@@ -37,6 +37,11 @@ const ticketSchema = new mongoose.Schema({
   ticketPrice: {
     type: Number,
     required: true,
+  },
+  
+  ticketStatus:{type:String,
+    enum:['active' , 'expired']
+
   }
 }, {timestamps: true});
 

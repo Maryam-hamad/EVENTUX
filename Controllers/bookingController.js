@@ -50,7 +50,7 @@ const bookEvent = async (req, res) => {
 
 const myTickets = async (req , res) =>{
   
-  const tickets = await Ticket.find({userId:req.user.id})
+  const tickets = await Ticket.find({user:req.user.id})
   .populate("eventId" , "title description date  eventUrl")//added the commas ...dont do it next time
 
   if(!tickets || tickets.length === 0) return res.status(404).json({message:"No active Tickets Avilable."})
@@ -60,7 +60,8 @@ const myTickets = async (req , res) =>{
    event:ticket.eventId.title,
    eventType:ticket.eventId.eventType,
    date:ticket.eventId.date,
-   createdAt:ticket.createdAt
+   createdAt:ticket.createdAt,
+   ticketStatus:ticket.ticketStatus
     
   }))
   return res.status(200).json(myTickets)
