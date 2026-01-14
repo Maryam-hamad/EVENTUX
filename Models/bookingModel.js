@@ -40,7 +40,7 @@ const ticketSchema = new mongoose.Schema({
   },
   
   ticketStatus:{type:String,
-    enum:['active' , 'expired']
+    enum:['active' , 'expired' , 'canceled']
 
   }
 }, {timestamps: true});

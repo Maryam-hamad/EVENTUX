@@ -30,7 +30,7 @@ const getAllEvents = async (req , res) => {
 // GET EVENT BY ID
   const getEventById = async (req, res) => {
    
-    const event =  await Event.findOne(req.params.id)
+    const event =  await Event.findOne(req.user._id)
 
     if(event)res.status(200).json(event)
     else res.status(404).json({message:"Event not found"})

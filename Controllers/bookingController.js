@@ -53,6 +53,8 @@ const myTickets = async (req , res) =>{
   const tickets = await Ticket.find({user:req.user.id})
   .populate("eventId" , "title description date  eventUrl")//added the commas ...dont do it next time
 
+
+
   if(!tickets || tickets.length === 0) return res.status(404).json({message:"No active Tickets Avilable."})
 
   const myTickets = tickets.map(ticket => ({
@@ -69,6 +71,8 @@ const myTickets = async (req , res) =>{
 }
 
 
+
+
 //GET REQUEST FOR ADMIN TO SEE ALL THE BOOKINGS
 
 const attendeeList = async (req , res) =>{
@@ -77,6 +81,7 @@ const attendeeList = async (req , res) =>{
 
     const tickets = await Ticket.find({eventId,UserId:req.user.id})
     .populate("userId" , "_id role ")
+    .populate('ticketStatus')
 
     if (!tickets || tickets.length === 0) {
       return res.status(404).json({ message: "No tickets found" })
@@ -86,6 +91,7 @@ const attendeeList = async (req , res) =>{
       name: ticket.name,
       email: ticket.email,
       createdAt: ticket.createdAt
+      
     }))
 
     return res.status(200).json(attendees)
@@ -97,6 +103,7 @@ const attendeeList = async (req , res) =>{
 const cancelBooking = async (req, res) => {
 
   const ticket = await Ticket.findById(req.params.id)
+
   if (!ticket) {
     return res.status(404).json({ message: "Ticket not Found" })
   }
@@ -109,7 +116,8 @@ const cancelBooking = async (req, res) => {
   event.tickets += ticket.numberOfTickets
   await event.save()
 
-  await ticket.deleteOne()
+  ticket.ticketStatus ='canceled'
+  await ticket.save()
 
   res.status(200).json({ message: "Booking cancelled successfully" })
 }
